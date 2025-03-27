@@ -7,6 +7,6 @@ const router= Router()
     .get('/tasks', get_All_tasks)
     .get('/task/:id', get_A_task)
     .put('/task/:id', authMW, updateTask)
-    .delete('task/:id',authMW, delete_A_Task)
+    .delete('/task/:id',authMW, delete_A_Task)
 
 module.exports = router    

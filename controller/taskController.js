@@ -52,8 +52,8 @@ const updateTask = async (req,res) => {
         if (!user) {
             return res.status(404).json({message: 'User not found'})
         }
-        const taskId = await taskModel.findById(id)
-        if (!taskId) {
+        const task = await taskModel.findById(id)
+        if (!task) {
             return res. status(404).json({message: ' Task not found'})
         }
         if (!userId || !id) {
@@ -62,7 +62,7 @@ const updateTask = async (req,res) => {
         if (!task.userId || !userId._id) {
             return res.status(403).json({message: 'Task not found'})
         }
-        const updatedTask = await new taskModel.findByIdAndUpdate(id, update, {new: true, runValidators: true})
+        const updatedTask = await taskModel.findByIdAndUpdate(id, update, {new: true, runValidators: true})
         await updatedTask.save()
         res.json(updatedTask)
     } catch (error) {
@@ -77,14 +77,14 @@ const delete_A_Task = async (req, res) => {
     const reqId = req.user
     try {
         const user = await userModel.findById(reqId)
-        const task = await taskModel.findById(id)
         if (!user) {
             return res.json({message: 'User not found'})
         }
+        const task = await taskModel.findById(id)
         if (!task) {
             return res.json({message: ' Task not found'})
         }
-        if (task.userId !== reqId.id ) {
+        if (!task.userId || task.userId.toString() !== reqId.id ) {
             return res.status(403).json({message: 'Unauthorized action'})
         }
         const deleteTask = await taskModel.findByIdAndDelete(id)
